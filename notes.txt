@@ -1,0 +1,223 @@
+Working Flex Direction:
+flex-direction: row (right to left row -> default)
+flex-direction: column (vertical column)
+flex-direction: row-reverse (right to left)
+flex-direction: column-reverse (axis starts at bottom to top)
+
+Wrapping elements with Flexbox:
+Flex container -> flex item
+set width of flex item - will try to evenly distribute
+set flex-wrap on container (not item)
+default flex-wrap = nowrap
+flex-wrap: wrap will wrap items and keep flex item width
+width: calc(33.3333333% - 20px);
+margin: 20px;
+
+Flexbox ordering:
+flex-container: flex
+flex-child: flex:1 /* fill full width - equally among children */
+order to give specific order
+example: .box3 {order:5;}
+by default, everything is set to order value of 0 (zero)
+
+Flex box alignment and Centering with justify-content:
+css tricks:
+https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+main axis - by default: left to right horizontal axis
+cross axis - by default: top to bottom vertical axis
+justify-content on parent container
+justify-content - aligns on main axis by default; switch to cross-axis alignment by setting flex-direction: column
+justify-content: how are items aligned on main axis?
+justify-content: flex-start (default) starts on left (or top to bottom flex-direction: column)
+justify-content: flex-end -aligns to right
+justify-content: center - centers horizontallly - similar to margin auto
+justify-content: space-between - gives padding/margin between items in row
+justify-content: space-around - similar to space-between but also adds margin/padding at flex-start/flex-end
+to take advantage of justify-content on flex-direction: column -> give height to container/child elements
+
+Alignment and Centering with align-items
+align-items, more concerned with cross-axis (vertical by default) can also swith to main axis by setting flex-direction: column (horizontal alignment isntead of vertical)
+align-items: center
+must give height to container to properly vertically align
+align-items: stretch ->  stretch to fill height
+align-items: flex-start -> align to top
+align-items: flex-end -> align to bottom
+align-items: baseline -> make sure bottom matches for each letter
+
+Alignment and centering with align-content
+align-content -> takes same parameters as justify-content -> more concerned with cross axis
+defaults to align-content: strectch (fills full height of container with no gutters padding or margin)
+
+Alignment and Centering with align-self
+align-self: overrides parent container's align-item directive: can add same properties as align-items
+
+Understanding flexbox sizing with the flex property
+flex: what do i do with extra space or if I don't have enough space? flexbox meant to work with space available without breaking layout
+flex: 1 -> each item takes same amount of space -> how should I scale up or down depending on container?
+flex: 2 would be 2x as big, flex: 3 3x as big, etc
+
+Finally Understanding Flexbox flex-grow, flex-shring, and flex-basis
+flex: 1 -> flex-grow: flex-shrink: flex-basis:
+flex-grow: 1 -> when we have extra space, how to divide on same line? each has equal width
+flex-shrink: 1 ->
+flex-basis: 400px -> will give 400px to width if space is available
+flex-grow defaults to 0 -> stays at flex-basis. flex grow is in reference to how extra space is used. flex-grow 2 would take 2x the amount of extra space as flex-grow 1
+default flex-shrink -> 1 how much of container to give up when not enough room
+
+
+how flexbox's flex-basis and wrapping work together
+flex-wrap: wrap;
+flex-grow: 1; -> combine above two rules to container to equal width and wrap child elements
+
+Cross Browser flexbox support and autoprefixer
+http://autoprefixer.github.io/
+install node, npm, gulp
+first install gulp globally
+sudo npm install gulp -g
+create gulp file
+touch gulpfile.js
+install gulp locally
+npm install gulp --save-dev
+npm install gulp-autoprefixer --save-dev
+
+edit gulpfile.js
+var gulp = require('gulp');
+var autoprefixer = require('gulp-autoprefixer');
+
+
+gulp.task('styles',function() {
+  gulp.src('css/styles.css')
+    .pipe(autoprefixer())
+    .pipe(gulp.dest('build'))
+});
+
+
+gulp.task('watch',function() {
+  gulp.watch('css/styles.css', ['styles']);
+});
+
+
+run styles task:
+gulp styles
+
+
+add watch task so that files is updated automatically
+gulp.task('watch',function() {
+  gulp.watch('css/styles.css', ['styles']);
+});
+
+
+Pure flexbox navigation code along
+see flexbox-nav project
+/* Flex Container */
+.flex-nav ul {
+  border:1px solid black;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display:flex;
+
+}
+.flex-nav li {
+  flex:3;
+}
+
+.flex-nav .social {
+  flex:1;
+}
+
+
+@media all and (max-width:1000px) {
+  .flex-nav ul {
+    flex-wrap:wrap;
+  }
+  .flex-nav li {
+    flex:1 1 50%;
+  }
+  .flex-nav .social {
+    flex:1 1 25%;
+  }
+
+}
+
+@media all and (max-width:500px) {
+  .flex-nav li {
+    flex-basis:100%;
+  }
+
+}
+
+Mobile content reordering with Flexbox
+set order on flex item
+order -> default value of 1 -> similar to z-index
+example:
+@media all and (max-width:500px) {
+  .flex-nav li {
+    flex-basis: 100%;
+  }
+
+  /* flex container */
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* flex items */
+  .wrapper>* {
+    order: 9999;
+  }
+
+  .flex-nav {
+    order: 1;
+  }
+  .toggleNav {
+    display:block;
+  }
+  .flex-nav ul {
+    display:none;
+  }
+  .flex-nav ul.open {
+    display:flex;
+  }
+  .top {
+    order:2;
+  }
+  .details {
+    order:3;
+  }
+  .signup {
+    order:4;
+  }
+}
+
+
+Nesting Flexbox for vertical and horizontal centering with Flexbox
+see nesting-flexbox exercise files for details. Nesting allows for easy vertical and horizontal centering
+
+flexbox pricing grid
+see pricing-grid exercise files
+
+Flexbox Equal height columns and leftover elements
+give same width to columns if number of on final row is not the same (2 instead of 3 as in the rest):
+update flex-grow to 0, see below
+.item {
+  flex:0 1 calc(33.33% - 20px);
+}
+
+combine with justify-content on parent container:
+.elements {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content: center;
+}
+alternatively,
+
+keep to remove justify-content from parent and keep flex grow to 0 to keep alignment in sync across rows:
+
+.item {
+  flex:0 1 calc(33.33% - 20px);
+}
+
+Flexbox single line form:
+free background videos: https://coverr.co/
+inputs are inline by default 

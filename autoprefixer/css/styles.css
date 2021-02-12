@@ -13,3 +13,12 @@
   flex:1 1 360px;
 }
 
+.example {
+    display: grid;
+    transition: all .5s;
+    user-select: none;
+    background: linear-gradient(to bottom, white, black);
+}
+.child {
+flex:10 5 400px;
+}
